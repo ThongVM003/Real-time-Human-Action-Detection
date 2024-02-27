@@ -20,7 +20,7 @@ make install-env
 To detect and track human in a video, run the following command:
 
 ```bash
-python3 src/action/main.py --model models/yolov8n.pt --source resources/test/res.mp4 --show
+python3 src/action/main.py --source resources/test/res.mp4 --show
 ```
 
 ## References :star:
