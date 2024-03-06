@@ -31,22 +31,26 @@ def detect(
     # Check the type of source
     if type == "image":
         results = net(source, classes=classes, conf=conf, iou=iou, verbose=False)
+        imgs = []
+        for result in results:
+            imgs.append(result.plot())
+        # Stack the images
+        img = np.hstack(imgs)
         if show:
-            imgs = []
-            for result in results:
-                imgs.append(result.plot())
-            # Stack the images
-            img = np.hstack(imgs)
-
+            cv2.imshow("Res", img)
+            cv2.waitKey(0)
+        if save:
+            cv2.imwrite(save, img)
     elif type == "video":
         return detect_video(source, net, conf=conf, iou=iou, show=show, save=save)
     else:
         print("[green]Defaulting to ultralytics detect[/green]")
         results = net(source, classes=classes)
+    return results
 
 
-def init_net(model_type=Models.HUMAN):
-    return YOLO(model_type)
+def init_net(model_type=Models.HUMAN_NANO):
+    return YOLO(eval("Models." + model_type))
 
 
 def detect_video(source, net, conf=0.3, iou=0.45, show=False, save=False):
@@ -82,7 +86,7 @@ def detect_video(source, net, conf=0.3, iou=0.45, show=False, save=False):
                 break
 
             # Detect the objects
-            results = net(frame, conf=conf, iou=iou, verbose=False)[0]
+            results = net(frame, classes=0, conf=conf, iou=iou, verbose=False)[0]
             detron.add_detection(results)
             frame = detron.track(frame, draw=True)
             if show:

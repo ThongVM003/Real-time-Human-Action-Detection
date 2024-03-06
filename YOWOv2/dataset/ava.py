@@ -16,26 +16,36 @@ except:
 
 # Dataset for AVA
 class AVA_Dataset(Dataset):
-    def __init__(self,
-                 cfg,
-                 data_root,
-                 is_train=False,
-                 img_size=224,
-                 transform=None,
-                 len_clip=16,
-                 sampling_rate=1):
+    def __init__(
+        self,
+        cfg,
+        data_root,
+        is_train=False,
+        img_size=224,
+        transform=None,
+        len_clip=16,
+        sampling_rate=1,
+    ):
         self.num_classes = 80
         self.data_root = data_root
-        self.frames_dir = os.path.join(data_root, cfg['frames_dir'])
-        self.frame_list = os.path.join(data_root, cfg['frame_list'])
-        self.annotation_dir = os.path.join(data_root, cfg['annotation_dir'])
-        self.labelmap_file = os.path.join(data_root, cfg['annotation_dir'], cfg['labelmap_file'])
+        self.frames_dir = os.path.join(data_root, cfg["frames_dir"])
+        self.frame_list = os.path.join(data_root, cfg["frame_list"])
+        self.annotation_dir = os.path.join(data_root, cfg["annotation_dir"])
+        self.labelmap_file = os.path.join(
+            data_root, cfg["annotation_dir"], cfg["labelmap_file"]
+        )
         if is_train:
-            self.gt_box_list = os.path.join(self.annotation_dir, cfg['train_gt_box_list'])
-            self.exclusion_file = os.path.join(self.annotation_dir, cfg['train_exclusion_file'])
+            self.gt_box_list = os.path.join(
+                self.annotation_dir, cfg["train_gt_box_list"]
+            )
+            self.exclusion_file = os.path.join(
+                self.annotation_dir, cfg["train_exclusion_file"]
+            )
         else:
-            self.gt_box_list = os.path.join(self.annotation_dir, cfg['val_gt_box_list'])
-            self.exclusion_file = os.path.join(self.annotation_dir, cfg['val_exclusion_file'])
+            self.gt_box_list = os.path.join(self.annotation_dir, cfg["val_gt_box_list"])
+            self.exclusion_file = os.path.join(
+                self.annotation_dir, cfg["val_exclusion_file"]
+            )
 
         self.transform = transform
         self.is_train = is_train
@@ -53,19 +63,12 @@ class AVA_Dataset(Dataset):
         (
             self._image_paths,
             self._video_idx_to_name,
-        ) = ava_helper.load_image_lists(
-            self.frames_dir,
-            self.frame_list,
-            self.is_train
-        )
+        ) = ava_helper.load_image_lists(self.frames_dir, self.frame_list, self.is_train)
 
         # Loading annotations for boxes and labels.
         # boxes_and_labels: {'<video_name>': {<frame_num>: a list of [box_i, box_i_labels]} }
         boxes_and_labels = ava_helper.load_boxes_and_labels(
-            self.gt_box_list,
-            self.exclusion_file,
-            self.is_train,
-            full_test_on_val=False
+            self.gt_box_list, self.exclusion_file, self.is_train, full_test_on_val=False
         )
 
         assert len(boxes_and_labels) == len(self._image_paths)
@@ -121,7 +124,13 @@ class AVA_Dataset(Dataset):
             seq (list): list of indexes of sampled frames in this clip.
         """
         # seq = list(range(center_idx - half_len, center_idx + half_len, sample_rate))
-        seq = list(range(center_idx - half_len * 2 + 1 * sample_rate, center_idx + 1 * sample_rate, sample_rate))
+        seq = list(
+            range(
+                center_idx - half_len * 2 + 1 * sample_rate,
+                center_idx + 1 * sample_rate,
+                sample_rate,
+            )
+        )
 
         for seq_idx in range(len(seq)):
             if seq[seq_idx] < 0:
@@ -174,7 +183,7 @@ class AVA_Dataset(Dataset):
         # load a video clip
         video_clip = []
         for img_path in image_paths:
-            frame = Image.open(img_path).convert('RGB')
+            frame = Image.open(img_path).convert("RGB")
             video_clip.append(frame)
         ow, oh = frame.width, frame.height
 
@@ -206,18 +215,17 @@ class AVA_Dataset(Dataset):
 
         # reformat target
         target = {
-            'boxes': target[:, :4].float(),  # [N, 4]
-            'labels': target[:, 4:].long(),  # [N, C]
-            'orig_size': [ow, oh],
-            'video_idx': video_idx,
-            'sec': sec,
-
+            "boxes": target[:, :4].float(),  # [N, 4]
+            "labels": target[:, 4:].long(),  # [N, C]
+            "orig_size": [ow, oh],
+            "video_idx": video_idx,
+            "sec": sec,
         }
 
         return [video_idx, sec], video_clip, target
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import cv2
     from transforms import Augmentation, BaseTransform
 
@@ -226,38 +234,33 @@ if __name__ == '__main__':
     len_clip = 16
     sampling_rate = 1
     dataset_config = {
-        'data_root': '/mnt/share/sda1/dataset/STAD/AVA_Dataset',
-        'frames_dir': 'frames/',
-        'frame_list': 'frame_lists/',
-        'annotation_dir': 'annotations/',
-        'train_gt_box_list': 'ava_v2.2/ava_train_v2.2.csv',
-        'val_gt_box_list': 'ava_v2.2/ava_val_v2.2.csv',
-        'train_exclusion_file': 'ava_v2.2/ava_train_excluded_timestamps_v2.2.csv',
-        'val_exclusion_file': 'ava_v2.2/ava_val_excluded_timestamps_v2.2.csv',
-        'labelmap_file': 'ava_v2.2/ava_action_list_v2.2.pbtxt',
+        "data_root": "/mnt/share/sda1/dataset/STAD/AVA_Dataset",
+        "frames_dir": "frames/",
+        "frame_list": "frame_lists/",
+        "annotation_dir": "annotations/",
+        "train_gt_box_list": "ava_v2.2/ava_train_v2.2.csv",
+        "val_gt_box_list": "ava_v2.2/ava_val_v2.2.csv",
+        "train_exclusion_file": "ava_v2.2/ava_train_excluded_timestamps_v2.2.csv",
+        "val_exclusion_file": "ava_v2.2/ava_val_excluded_timestamps_v2.2.csv",
+        "labelmap_file": "ava_v2.2/ava_action_list_v2.2.pbtxt",
     }
-    trans_config = {
-        'jitter': 0.2,
-        'hue': 0.1,
-        'saturation': 1.5,
-        'exposure': 1.5
-    }
+    trans_config = {"jitter": 0.2, "hue": 0.1, "saturation": 1.5, "exposure": 1.5}
     train_transform = Augmentation(
         img_size=img_size,
-        jitter=trans_config['jitter'],
-        saturation=trans_config['saturation'],
-        exposure=trans_config['exposure']
+        jitter=trans_config["jitter"],
+        saturation=trans_config["saturation"],
+        exposure=trans_config["exposure"],
     )
     val_transform = BaseTransform(img_size=img_size)
 
     train_dataset = AVA_Dataset(
         cfg=dataset_config,
-        data_root=dataset_config['data_root'],
+        data_root=dataset_config["data_root"],
         is_train=is_train,
         img_size=img_size,
         transform=train_transform,
         len_clip=len_clip,
-        sampling_rate=sampling_rate
+        sampling_rate=sampling_rate,
     )
 
     print(len(train_dataset))
@@ -274,8 +277,8 @@ if __name__ == '__main__':
         H, W, C = key_frame.shape
 
         key_frame = key_frame.copy()
-        bboxes = target['boxes']
-        labels = target['labels']
+        bboxes = target["boxes"]
+        labels = target["labels"]
 
         for box, cls_id in zip(bboxes, labels):
             x1, y1, x2, y2 = box
@@ -286,5 +289,5 @@ if __name__ == '__main__':
             key_frame = cv2.rectangle(key_frame, (x1, y1), (x2, y2), (255, 0, 0))
 
         # cv2 show
-        cv2.imshow('key frame', key_frame)
+        cv2.imshow("key frame", key_frame)
         cv2.waitKey(0)

@@ -1,6 +1,6 @@
 # Ignore pycache
 __pycache__/
-
+data/
 # Ignore the virtual environment
 venv/
 ```
@@ -16,3 +16,7 @@ weights/
 
 # ignore logs
 logs/
+
+meo.py
+
+.idea/

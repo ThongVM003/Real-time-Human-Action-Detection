@@ -20,7 +20,7 @@ class Augmentation(object):
         if random.randint(0, 1):
             return scale
 
-        return 1. / scale
+        return 1.0 / scale
 
     def random_distort_image(self, video_clip):
         dhue = random.uniform(-self.hue, self.hue)
@@ -29,7 +29,7 @@ class Augmentation(object):
 
         video_clip_ = []
         for image in video_clip:
-            image = image.convert('HSV')
+            image = image.convert("HSV")
             cs = list(image.split())
             cs[1] = cs[1].point(lambda i: int(i * dsat))
             cs[2] = cs[2].point(lambda i: int(i * dexp))
@@ -45,7 +45,7 @@ class Augmentation(object):
             cs[0] = cs[0].point(change_hue)
             image = Image.merge(image.mode, tuple(cs))
 
-            image = image.convert('RGB')
+            image = image.convert("RGB")
 
             video_clip_.append(image)
 
@@ -70,12 +70,15 @@ class Augmentation(object):
         dy = (float(ptop) / height) / sy
 
         # random crop
-        cropped_clip = [img.crop((pleft, ptop, pleft + swidth - 1, ptop + sheight - 1)) for img in video_clip]
+        cropped_clip = [
+            img.crop((pleft, ptop, pleft + swidth - 1, ptop + sheight - 1))
+            for img in video_clip
+        ]
 
         return cropped_clip, dx, dy, sx, sy
 
     def apply_bbox(self, target, ow, oh, dx, dy, sx, sy):
-        sx, sy = 1. / sx, 1. / sy
+        sx, sy = 1.0 / sx, 1.0 / sy
         # apply deltas on bbox
         target[..., 0] = np.minimum(0.999, np.maximum(0, target[..., 0] / ow * sx - dx))
         target[..., 1] = np.minimum(0.999, np.maximum(0, target[..., 1] / oh * sy - dy))
@@ -89,7 +92,7 @@ class Augmentation(object):
             bw = (tgt[2] - tgt[0]) * ow
             bh = (tgt[3] - tgt[1]) * oh
 
-            if bw < 1. or bh < 1.:
+            if bw < 1.0 or bh < 1.0:
                 continue
 
             refine_target.append(tgt)
@@ -99,7 +102,7 @@ class Augmentation(object):
         return refine_target
 
     def to_tensor(self, video_clip):
-        return [F.to_tensor(image) * 255. for image in video_clip]
+        return [F.to_tensor(image) * 255.0 for image in video_clip]
 
     def __call__(self, video_clip, target):
         # Initialize Random Variables
@@ -138,11 +141,14 @@ class Augmentation(object):
 
 
 class BaseTransform(object):
-    def __init__(self, img_size=224, ):
+    def __init__(
+        self,
+        img_size=224,
+    ):
         self.img_size = img_size
 
     def to_tensor(self, video_clip):
-        return [F.to_tensor(image) * 255. for image in video_clip]
+        return [F.to_tensor(image) * 255.0 for image in video_clip]
 
     def __call__(self, video_clip, target=None, normalize=True):
         oh = video_clip[0].height
@@ -165,4 +171,3 @@ class BaseTransform(object):
         target = torch.as_tensor(target).float()
 
         return video_clip, target
-
