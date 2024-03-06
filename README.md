@@ -9,11 +9,33 @@ An optimize pipeline to apply action detection in real time scenario
 
 ### Installation :robot:
 
-To install the required packages, run the following command:
+#### YOWOv2
+
+- We reccomand create a virtual enviroment with:
+```
+virtualenv venv --python=python3.10
+```
+- This only works if you have python3.10 installed at the system level (e.g. /usr/bin/python3.10).
+- Then activate the enviroment:
+```
+source venv/bin/activate
+```
+- Install the requirements:
+```Shell
+pip install -r requirements.txt
+```
+
+
+#### ST-GCN
+- To install the required packages, run the following command:
 
 ```bash
 make install-env
 ```
+
+### Dataset
+#### MCF-UCF24:
+- You can download **MCF-UCF24** from the following link: [Google Drive](https://drive.google.com/file/d/1hXTZNflg92JRtT0vr6tNuDZLkpPMvp90/view?usp=sharing)
 
 ### Human detect and tracking :girl:
 
