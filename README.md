@@ -35,7 +35,7 @@ make install-env
 
 ### Dataset
 #### MCF-UCF24:
-- You can download **MCF-UCF24** from the following link: [Google Drive](https://drive.google.com/file/d/1hXTZNflg92JRtT0vr6tNuDZLkpPMvp90/view?usp=sharing)
+- You can download **MCF-UCF24** from the following link: [Google Drive](https://drive.google.com/file/d/1wUlZ4SnvmCUO-kZwUJ70-WLQKTK5TnIn/view?usp=sharing)
 
 ### Human detect and tracking :girl:
 
