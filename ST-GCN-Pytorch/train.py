@@ -26,7 +26,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 torch.cuda.empty_cache()
 torch.cuda.reset_peak_memory_stats()
 # Get parameter
-with open("./config.yaml", "r") as stream:
+with open("./ST-GCN-Pytorch/config.yaml", "r") as stream:
     try:
         data = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
@@ -62,8 +62,8 @@ features[:, :, :, :2] = processing_data(features[:, :, :, :2])
 x_train = features
 y_train = labels
 print(" --------- Number class train---------")
-print(y_train)
-exit(0)
+# print(y_train)
+# exit(0)
 for i in range(7):
     print(f"class {i}: {labels.tolist().count(i)}")
 
