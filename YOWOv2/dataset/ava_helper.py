@@ -87,7 +87,9 @@ def load_image_lists(frames_dir, frame_list, is_train):
     return image_paths, video_idx_to_name
 
 
-def load_boxes_and_labels(gt_box_list, exclusion_file, is_train=False, full_test_on_val=False):
+def load_boxes_and_labels(
+    gt_box_list, exclusion_file, is_train=False, full_test_on_val=False
+):
     """
     Loading boxes and labels from csv files.
 
@@ -107,9 +109,9 @@ def load_boxes_and_labels(gt_box_list, exclusion_file, is_train=False, full_test
     unique_box_count = 0
     excluded_keys = read_exclusions(exclusion_file)
 
-    with open(ann_filename, 'r') as f:
+    with open(ann_filename, "r") as f:
         for line in f:
-            row = line.strip().split(',')
+            row = line.strip().split(",")
 
             video_name, frame_sec = row[0], int(row[1])
             key = "%s,%04d" % (video_name, frame_sec)
@@ -185,9 +187,7 @@ def get_keyframe_data(boxes_and_labels):
                 continue
 
             if len(boxes_and_labels[video_idx][sec]) > 0:
-                keyframe_indices.append(
-                    (video_idx, sec_idx, sec, sec_to_frame(sec))
-                )
+                keyframe_indices.append((video_idx, sec_idx, sec, sec_to_frame(sec)))
                 keyframe_boxes_and_labels[video_idx].append(
                     boxes_and_labels[video_idx][sec]
                 )
@@ -225,4 +225,4 @@ def get_max_objs(keyframe_indices, keyframe_boxes_and_labels):
     #         max_objs = num_boxes
 
     # return max_objs
-    return 50 #### MODIFICATION FOR NOW! TODO: FIX LATER!
+    return 50  #### MODIFICATION FOR NOW! TODO: FIX LATER!

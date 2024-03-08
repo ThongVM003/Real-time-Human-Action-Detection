@@ -5,4 +5,5 @@ dir = pathlib.Path(__file__).parent.resolve()
 
 
 class Models:
-    HUMAN = join(dir, "yolov8n.pt")
+    HUMAN_NANO = join(dir, "yolov8n.pt")
+    HUMAN_X = join(dir, "yolov8x.pt")

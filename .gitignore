@@ -1,12 +1,28 @@
 # Ignore pycache
 __pycache__/
-
-*.pt
-*.pth
-*.pkl
+data/
+# Ignore the virtual environment
+venv/
+```
+# ignore all .pyc files
 *.pyc
 __pycache__
 det_results
 .vscode
 **/data/
 weights
+
+# Ignore the data
+data/
+```
+
+# ignore weights
+weights/
+
+# ignore logs
+logs/
+
+meo.py
+
+.idea/
+runs/
