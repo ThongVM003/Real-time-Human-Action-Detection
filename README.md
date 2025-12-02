@@ -5,6 +5,13 @@
 
 An optimize pipeline to apply action detection in real time scenario
 
+DEMO WITH DASHBOARD
+<video src="https://github.com/user-attachments/assets/97b4cf87-9829-4a64-9ad5-eabdfc6b9061" controls preload></video>
+
+
+
+
+
 ## Usage
 
 ### Installation :robot:
